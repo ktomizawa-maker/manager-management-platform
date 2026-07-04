@@ -10,13 +10,22 @@ if (!target) {
 const baseUrl = target.endsWith("/") ? target : `${target}/`;
 const requiredText = [
   "店長OS",
-  "4領域のスコアを見る",
+  "店舗を選択",
+  "成果アプリを開く",
+  "理念浸透を開く",
   "売上達成率",
   "教育進捗率",
   "離職率",
   "マネジメントチェック"
 ];
-const childPaths = ["culture/"];
+const cultureRequiredText = [
+  "理念浸透",
+  "IDEA NOVベーシック",
+  "2026年スローガン",
+  "360度アンケート関連",
+  "マネジメントチェック関連"
+];
+const requiredAssets = ["assets/ideanov-basic.png", "assets/slogan-2026.png"];
 const forbiddenPatterns = [
   /service_role\s*[:=]/i,
   /SUPABASE_SERVICE_ROLE/i,
@@ -35,6 +44,13 @@ async function assertOk(url) {
     throw new Error(`${url} returned HTTP ${response.status}`);
   }
   return body;
+}
+
+async function assertAssetOk(url) {
+  const response = await fetch(url, { redirect: "follow" });
+  if (!response.ok) {
+    throw new Error(`${url} returned HTTP ${response.status}`);
+  }
 }
 
 function assertContains(body, text) {
@@ -61,9 +77,14 @@ async function main() {
   const appJs = await assertOk(new URL("app.js", baseUrl).toString());
   assertNoForbiddenSecrets("app.js", appJs);
 
-  for (const path of childPaths) {
-    const body = await assertOk(new URL(path, baseUrl).toString());
-    assertNoForbiddenSecrets(path, body);
+  const cultureHtml = await assertOk(new URL("culture/", baseUrl).toString());
+  for (const text of cultureRequiredText) {
+    assertContains(cultureHtml, text);
+  }
+  assertNoForbiddenSecrets("culture/", cultureHtml);
+
+  for (const assetPath of requiredAssets) {
+    await assertAssetOk(new URL(assetPath, baseUrl).toString());
   }
 
   console.log("OK: public Management Platform URL passed smoke checks");
