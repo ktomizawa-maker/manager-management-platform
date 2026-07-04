@@ -1,17 +1,20 @@
-# Score Hub Update
+﻿# Score Hub Update
 
 Updated: 2026-07-04
 
 ## Summary
 
-Management Platform TOP was simplified into a manager score hub.
+Management Platform TOP was redesigned as a store-aware manager score hub.
 
 ## Changed
 
-- Removed the previous hero/status/action-heavy layout.
-- Kept the page focused on app links and score visibility.
-- Added score rows for the four evaluation domains.
-- Kept BASSA LINE-style tone: white base, subtle borders, small typography, no heavy decoration.
+- Redesigned the TOP page with a cleaner BASSA LINE-style operation layout.
+- Added store selection UI.
+- Store options are read from the Supabase Edge Function response when `stores` is returned.
+- Added four app launch cards: 成果, 育成, 定着, 理念.
+- Created the 理念浸透 app under `management-platform/culture/`.
+- Added IDEA NOV BASIC and 2026 slogan images to the 理念浸透 app.
+- Added sections for 360度アンケート関連 and マネジメントチェック関連.
 
 ## Score Items
 
@@ -46,9 +49,9 @@ Management Platform TOP was simplified into a manager score hub.
 
 ## Current Data State
 
+- Store select is ready, but requires the Edge Function to return `stores`.
 - Score source is not finalized yet.
-- The UI currently displays `-` when a score value is not returned.
-- `app.js` is prepared to receive score values from the Supabase Edge Function response.
+- The UI displays `-` when a score value is not returned.
 - No Supabase DB schema, RLS, GRANT, UPDATE, DELETE, or service_role key changes were made.
 
 ## Public URL

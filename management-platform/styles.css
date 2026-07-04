@@ -252,7 +252,7 @@ select:disabled { background: var(--surface-soft); color: var(--text-secondary);
 .image-panel {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  background: var(--bg-primary);
+  background: var(--surface-soft);
   overflow: hidden;
 }
 .image-panel img {
@@ -260,7 +260,7 @@ select:disabled { background: var(--surface-soft); color: var(--text-secondary);
   height: 100%;
   display: block;
   aspect-ratio: 16 / 10;
-  object-fit: cover;
+  object-fit: contain;
 }
 .culture-grid {
   display: grid;
@@ -332,3 +332,5 @@ select:disabled { background: var(--surface-soft); color: var(--text-secondary);
   .control-panel { padding: var(--spacing-md); }
   .section-heading { align-items: flex-start; flex-direction: column; }
 }
+
+
