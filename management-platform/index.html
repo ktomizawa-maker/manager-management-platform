@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>店長Management Platform</title>
-    <meta name="description" content="店長が成果、育成、定着、理念浸透の現在地と次アクションを確認するManagement Platform TOP画面" />
+    <meta name="description" content="店長評価4領域のアプリリンクと主要スコアを確認するTOP画面" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <a class="skip-link" href="#domains">メインへ移動</a>
+    <a class="skip-link" href="#score-grid">メインへ移動</a>
     <div class="app-shell">
       <header class="topbar" aria-label="Management Platform header">
         <div class="brand-lockup">
@@ -20,125 +20,88 @@
         </div>
         <div class="context-panel" aria-label="店舗コンテキスト">
           <span id="storeName">店舗未選択</span>
-          <span id="managerName">店長</span>
+          <span id="connectionState">接続確認中</span>
         </div>
       </header>
 
       <main>
-        <section class="hero" aria-labelledby="hero-title">
-          <div class="hero-copy">
-            <p class="eyebrow">Daily Hub</p>
-            <h2 id="hero-title">今日やることを、すぐ確認。</h2>
-            <p>4領域の状態と次アクションをまとめて確認できます。</p>
+        <section class="page-intro" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow">Manager Score Hub</p>
+            <h2 id="page-title">4領域のスコアを見る</h2>
+            <p>各アプリへの入口と、店長評価に関わる主要スコアを一覧で確認します。</p>
           </div>
-          <div class="today-board" aria-label="本日の確認">
-            <div><span class="metric-label">優先確認</span><strong id="priorityCount">4</strong></div>
-            <div><span class="metric-label">更新日</span><strong id="updatedDate">-</strong></div>
-            <div><span class="metric-label">接続</span><strong id="connectionState">静的</strong></div>
-          </div>
-        </section>
-
-        <nav class="quick-actions" aria-label="クイックアクション">
-          <a href="#domains">4領域を見る</a>
-          <a href="#weekly-focus">今週の重点</a>
-          <a href="#today-actions">今日の運用</a>
-          <a href="#integration-note">接続メモ</a>
-        </nav>
-
-        <section class="ops-strip" aria-label="運用状況">
-          <div><span class="metric-label">同期元</span><strong id="summarySource">未接続</strong></div>
-          <div><span class="metric-label">最終同期</span><strong id="lastSyncedAt">-</strong></div>
-          <div><span class="metric-label">確認状態</span><strong id="reviewState">未確認</strong></div>
-        </section>
-
-        <section class="section-heading" id="domains" aria-labelledby="domains-title">
-          <p class="eyebrow">Evaluation Areas</p>
-          <h2 id="domains-title">4領域</h2>
-        </section>
-
-        <section class="domain-grid" aria-label="店長評価4領域">
-          <article class="domain-card" data-domain="sales" data-status="watch">
-            <div class="card-topline"><span class="domain-icon" aria-hidden="true">📈</span><span class="status-chip" data-field="statusLabel">⚠️ 要確認</span></div>
-            <h3>成果</h3>
-            <p data-field="domainSummary">売上、粗利、客数、客単価など、店舗成果の現在地と打ち手を確認します。</p>
-            <dl class="card-metrics">
-              <div><dt>見るもの</dt><dd>予算比 / 前年比 / 重点KPI</dd></div>
-              <div><dt>次アクション</dt><dd><span data-field="nextAction">日次の差分要因を確認</span></dd></div>
-            </dl>
-            <a class="card-link" href="https://script.google.com/macros/s/AKfycbyZo63D_wNZaDIaAtHycoyLkWolAkKbf4u1-_vK8gCiveAQz0XOMLBEYVB-SSQOfNx4/exec" target="_blank" rel="noopener noreferrer" aria-label="成果アプリを新しいタブで開く">成果アプリへ</a>
-          </article>
-
-          <article class="domain-card" data-domain="training" data-status="steady">
-            <div class="card-topline"><span class="domain-icon" aria-hidden="true">🌱</span><span class="status-chip" data-field="statusLabel">✓ 進行中</span></div>
-            <h3>育成</h3>
-            <p data-field="domainSummary">スタッフの成長テーマ、面談、習熟状況を見える化し、育成の滞留を減らします。</p>
-            <dl class="card-metrics">
-              <div><dt>見るもの</dt><dd>面談予定 / 習熟 / 任せ方</dd></div>
-              <div><dt>次アクション</dt><dd><span data-field="nextAction">今週育てる1項目を選ぶ</span></dd></div>
-            </dl>
-            <a class="card-link" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbxKLThF4TN18-OwaOFKbqwoPPSAHB7HH4v3_IkTXEmAGrhDJyzS1GfkfC1GFGiA7vUZew/exec?page=home" target="_blank" rel="noopener noreferrer" aria-label="育成アプリを新しいタブで開く">育成アプリへ</a>
-          </article>
-
-          <article class="domain-card" data-domain="retention" data-status="risk">
-            <div class="card-topline"><span class="domain-icon" aria-hidden="true">🤝</span><span class="status-chip" data-field="statusLabel">⚠️ 注意</span></div>
-            <h3>定着</h3>
-            <p data-field="domainSummary">勤怠、負荷、コンディション、離職兆候を早めに拾い、チームの安定度を保ちます。</p>
-            <dl class="card-metrics">
-              <div><dt>見るもの</dt><dd>シフト負荷 / 欠勤 / 声かけ</dd></div>
-              <div><dt>次アクション</dt><dd><span data-field="nextAction">気になる人に声をかける</span></dd></div>
-            </dl>
-            <a class="card-link" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbwW8YZDEC_KAcWTD1Xym1un5qFlgoDW9KzBvENLfnbrCECn0WUTMC3d2RikfP9NiAER/exec" target="_blank" rel="noopener noreferrer" aria-label="定着アプリを新しいタブで開く">定着アプリへ</a>
-          </article>
-
-          <article class="domain-card" data-domain="culture" data-status="steady">
-            <div class="card-topline"><span class="domain-icon" aria-hidden="true">💬</span><span class="status-chip" data-field="statusLabel">✓ 習慣化</span></div>
-            <h3>理念浸透 / コンピテンシー / チームワーク</h3>
-            <p data-field="domainSummary">行動基準、連携、店舗らしさの浸透を確認し、日々の判断とチーム運営につなげます。</p>
-            <dl class="card-metrics">
-              <div><dt>見るもの</dt><dd>行動例 / 連携 / 称賛</dd></div>
-              <div><dt>次アクション</dt><dd><span data-field="nextAction">よい行動を言語化する</span></dd></div>
-            </dl>
-            <a class="card-link" href="./culture/" aria-label="理念浸透アプリへ移動">理念アプリへ</a>
-          </article>
-        </section>
-
-        <section class="today-actions" id="today-actions" aria-labelledby="today-actions-title">
-          <div class="section-heading compact">
-            <p class="eyebrow">Daily Operation</p>
-            <h2 id="today-actions-title">今日の運用</h2>
-          </div>
-          <div class="action-board">
-            <article>
-              <span class="step-number">1</span>
-              <h3>差分を見る</h3>
-              <p>4領域カードのステータスを確認し、注意または要確認の領域を先に開きます。</p>
-            </article>
-            <article>
-              <span class="step-number">2</span>
-              <h3>1つ決める</h3>
-              <p>次アクションから今日やることを1つ選び、朝礼または終礼で扱います。</p>
-            </article>
-            <article>
-              <span class="step-number">3</span>
-              <h3>戻って確認</h3>
-              <p>営業後にもう一度TOPへ戻り、明日に残す課題を整理します。</p>
-            </article>
+          <div class="sync-card" aria-label="同期状態">
+            <span class="metric-label">最終同期</span>
+            <strong id="lastSyncedAt">-</strong>
           </div>
         </section>
 
-        <section class="focus-band" id="weekly-focus" aria-labelledby="focus-title">
-          <div><p class="eyebrow">Weekly Focus</p><h2 id="focus-title">今週の重点</h2></div>
-          <ol class="focus-list">
-            <li>成果の差分を確認し、1つだけ原因仮説を置く</li>
-            <li>育成対象者を1名決め、任せる業務を明確にする</li>
-            <li>定着リスクが高いサインを朝礼前に確認する</li>
-          </ol>
-        </section>
+        <section class="score-grid" id="score-grid" aria-label="店長評価スコア一覧">
+          <article class="score-card" data-domain="sales">
+            <div class="card-heading">
+              <div>
+                <span class="domain-icon" aria-hidden="true">📈</span>
+                <h3>成果</h3>
+              </div>
+              <a class="app-link" href="https://script.google.com/macros/s/AKfycbyZo63D_wNZaDIaAtHycoyLkWolAkKbf4u1-_vK8gCiveAQz0XOMLBEYVB-SSQOfNx4/exec" target="_blank" rel="noopener noreferrer">成果アプリ</a>
+            </div>
+            <dl class="score-list">
+              <div><dt>売上達成率</dt><dd data-score="sales.salesAchievement">-</dd></div>
+              <div><dt>貢献生産性</dt><dd data-score="sales.contributionProductivity">-</dd></div>
+              <div><dt>アプローチ率</dt><dd data-score="sales.approachRate">-</dd></div>
+              <div><dt>NPS</dt><dd data-score="sales.nps">-</dd></div>
+              <div><dt>顧客満足度</dt><dd data-score="sales.customerSatisfaction">-</dd></div>
+            </dl>
+          </article>
 
-        <section class="integration-note" id="integration-note" aria-labelledby="integration-title">
-          <p class="eyebrow">Implementation Note</p>
-          <h2 id="integration-title">接続状態</h2>
-          <p>このTOP画面はread-onlyのハブです。既存DBの変更、新規DDL、更新系処理、権限変更、service_role keyの利用は行っていません。</p>
+          <article class="score-card" data-domain="training">
+            <div class="card-heading">
+              <div>
+                <span class="domain-icon" aria-hidden="true">🌱</span>
+                <h3>育成</h3>
+              </div>
+              <a class="app-link" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbxKLThF4TN18-OwaOFKbqwoPPSAHB7HH4v3_IkTXEmAGrhDJyzS1GfkfC1GFGiA7vUZew/exec?page=home" target="_blank" rel="noopener noreferrer">育成アプリ</a>
+            </div>
+            <dl class="score-list">
+              <div><dt>教育進捗率</dt><dd data-score="training.educationProgress">-</dd></div>
+              <div><dt>新規リピート率</dt><dd data-score="training.newRepeatRate">-</dd></div>
+              <div><dt>リーダー輩出</dt><dd data-score="training.leaderDevelopment">-</dd></div>
+            </dl>
+          </article>
+
+          <article class="score-card" data-domain="retention">
+            <div class="card-heading">
+              <div>
+                <span class="domain-icon" aria-hidden="true">🤝</span>
+                <h3>定着</h3>
+              </div>
+              <a class="app-link" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbwW8YZDEC_KAcWTD1Xym1un5qFlgoDW9KzBvENLfnbrCECn0WUTMC3d2RikfP9NiAER/exec" target="_blank" rel="noopener noreferrer">定着アプリ</a>
+            </div>
+            <dl class="score-list">
+              <div><dt>離職率</dt><dd data-score="retention.turnoverRate">-</dd></div>
+              <div><dt>面談実施率</dt><dd data-score="retention.interviewRate">-</dd></div>
+              <div><dt>eNPS</dt><dd data-score="retention.enps">-</dd></div>
+            </dl>
+          </article>
+
+          <article class="score-card" data-domain="culture">
+            <div class="card-heading">
+              <div>
+                <span class="domain-icon" aria-hidden="true">💬</span>
+                <h3>理念</h3>
+              </div>
+              <a class="app-link secondary" href="./culture/">理念アプリ</a>
+            </div>
+            <dl class="score-list">
+              <div><dt>挨拶</dt><dd data-score="culture.greeting">-</dd></div>
+              <div><dt>約束</dt><dd data-score="culture.promise">-</dd></div>
+              <div><dt>チームワーク</dt><dd data-score="culture.teamwork">-</dd></div>
+              <div><dt>思いやり</dt><dd data-score="culture.consideration">-</dd></div>
+              <div><dt>報連相</dt><dd data-score="culture.reporting">-</dd></div>
+              <div><dt>マネジメントチェック</dt><dd data-score="culture.managementCheck">-</dd></div>
+            </dl>
+          </article>
         </section>
       </main>
     </div>
@@ -146,7 +109,3 @@
     <script src="./app.js"></script>
   </body>
 </html>
-
-
-
-
