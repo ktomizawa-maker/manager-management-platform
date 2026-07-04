@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>店長Management Platform</title>
-    <meta name="description" content="店長評価4領域のアプリリンクと主要スコアを確認するTOP画面" />
+    <meta name="description" content="店長評価4領域のアプリリンク、店舗選択、主要スコアを確認するTOP画面" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -18,90 +18,96 @@
             <h1>店長OS</h1>
           </div>
         </div>
-        <div class="context-panel" aria-label="店舗コンテキスト">
-          <span id="storeName">店舗未選択</span>
+        <div class="header-status" aria-label="接続状態">
           <span id="connectionState">接続確認中</span>
         </div>
       </header>
 
       <main>
-        <section class="page-intro" aria-labelledby="page-title">
+        <section class="control-panel" aria-labelledby="control-title">
           <div>
-            <p class="eyebrow">Manager Score Hub</p>
-            <h2 id="page-title">4領域のスコアを見る</h2>
-            <p>各アプリへの入口と、店長評価に関わる主要スコアを一覧で確認します。</p>
+            <p class="eyebrow">Store Context</p>
+            <h2 id="control-title">店舗を選択</h2>
+            <p id="storeHelp">Supabaseから店舗情報を取得して、表示するスコアを切り替えます。</p>
           </div>
-          <div class="sync-card" aria-label="同期状態">
-            <span class="metric-label">最終同期</span>
-            <strong id="lastSyncedAt">-</strong>
-          </div>
+          <label class="store-select-wrap" for="storeSelect">
+            <span>対象店舗</span>
+            <select id="storeSelect" name="storeSelect" disabled>
+              <option value="">店舗情報を取得中</option>
+            </select>
+          </label>
         </section>
 
-        <section class="score-grid" id="score-grid" aria-label="店長評価スコア一覧">
-          <article class="score-card" data-domain="sales">
-            <div class="card-heading">
-              <div>
-                <span class="domain-icon" aria-hidden="true">📈</span>
-                <h3>成果</h3>
-              </div>
-              <a class="app-link" href="https://script.google.com/macros/s/AKfycbyZo63D_wNZaDIaAtHycoyLkWolAkKbf4u1-_vK8gCiveAQz0XOMLBEYVB-SSQOfNx4/exec" target="_blank" rel="noopener noreferrer">成果アプリ</a>
-            </div>
-            <dl class="score-list">
-              <div><dt>売上達成率</dt><dd data-score="sales.salesAchievement">-</dd></div>
-              <div><dt>貢献生産性</dt><dd data-score="sales.contributionProductivity">-</dd></div>
-              <div><dt>アプローチ率</dt><dd data-score="sales.approachRate">-</dd></div>
-              <div><dt>NPS</dt><dd data-score="sales.nps">-</dd></div>
-              <div><dt>顧客満足度</dt><dd data-score="sales.customerSatisfaction">-</dd></div>
-            </dl>
-          </article>
+        <section class="app-launch" aria-label="各アプリへのリンク">
+          <a class="launch-card" href="https://script.google.com/macros/s/AKfycbyZo63D_wNZaDIaAtHycoyLkWolAkKbf4u1-_vK8gCiveAQz0XOMLBEYVB-SSQOfNx4/exec" target="_blank" rel="noopener noreferrer">
+            <span>成果</span>
+            <strong>成果アプリを開く</strong>
+          </a>
+          <a class="launch-card" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbxKLThF4TN18-OwaOFKbqwoPPSAHB7HH4v3_IkTXEmAGrhDJyzS1GfkfC1GFGiA7vUZew/exec?page=home" target="_blank" rel="noopener noreferrer">
+            <span>育成</span>
+            <strong>育成アプリを開く</strong>
+          </a>
+          <a class="launch-card" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbwW8YZDEC_KAcWTD1Xym1un5qFlgoDW9KzBvENLfnbrCECn0WUTMC3d2RikfP9NiAER/exec" target="_blank" rel="noopener noreferrer">
+            <span>定着</span>
+            <strong>定着アプリを開く</strong>
+          </a>
+          <a class="launch-card" href="./culture/">
+            <span>理念</span>
+            <strong>理念浸透を開く</strong>
+          </a>
+        </section>
 
-          <article class="score-card" data-domain="training">
-            <div class="card-heading">
-              <div>
-                <span class="domain-icon" aria-hidden="true">🌱</span>
-                <h3>育成</h3>
-              </div>
-              <a class="app-link" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbxKLThF4TN18-OwaOFKbqwoPPSAHB7HH4v3_IkTXEmAGrhDJyzS1GfkfC1GFGiA7vUZew/exec?page=home" target="_blank" rel="noopener noreferrer">育成アプリ</a>
+        <section class="score-section" aria-labelledby="score-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Score</p>
+              <h2 id="score-title">4領域スコア</h2>
             </div>
-            <dl class="score-list">
-              <div><dt>教育進捗率</dt><dd data-score="training.educationProgress">-</dd></div>
-              <div><dt>新規リピート率</dt><dd data-score="training.newRepeatRate">-</dd></div>
-              <div><dt>リーダー輩出</dt><dd data-score="training.leaderDevelopment">-</dd></div>
-            </dl>
-          </article>
+            <p>最終同期 <span id="lastSyncedAt">-</span></p>
+          </div>
 
-          <article class="score-card" data-domain="retention">
-            <div class="card-heading">
-              <div>
-                <span class="domain-icon" aria-hidden="true">🤝</span>
-                <h3>定着</h3>
-              </div>
-              <a class="app-link" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbwW8YZDEC_KAcWTD1Xym1un5qFlgoDW9KzBvENLfnbrCECn0WUTMC3d2RikfP9NiAER/exec" target="_blank" rel="noopener noreferrer">定着アプリ</a>
-            </div>
-            <dl class="score-list">
-              <div><dt>離職率</dt><dd data-score="retention.turnoverRate">-</dd></div>
-              <div><dt>面談実施率</dt><dd data-score="retention.interviewRate">-</dd></div>
-              <div><dt>eNPS</dt><dd data-score="retention.enps">-</dd></div>
-            </dl>
-          </article>
+          <div class="score-grid" id="score-grid" aria-label="店長評価スコア一覧">
+            <article class="score-card" data-domain="sales">
+              <div class="card-heading"><h3>成果</h3><span>Sales</span></div>
+              <dl class="score-list">
+                <div><dt>売上達成率</dt><dd data-score="sales.salesAchievement">-</dd></div>
+                <div><dt>貢献生産性</dt><dd data-score="sales.contributionProductivity">-</dd></div>
+                <div><dt>アプローチ率</dt><dd data-score="sales.approachRate">-</dd></div>
+                <div><dt>NPS</dt><dd data-score="sales.nps">-</dd></div>
+                <div><dt>顧客満足度</dt><dd data-score="sales.customerSatisfaction">-</dd></div>
+              </dl>
+            </article>
 
-          <article class="score-card" data-domain="culture">
-            <div class="card-heading">
-              <div>
-                <span class="domain-icon" aria-hidden="true">💬</span>
-                <h3>理念</h3>
-              </div>
-              <a class="app-link secondary" href="./culture/">理念アプリ</a>
-            </div>
-            <dl class="score-list">
-              <div><dt>挨拶</dt><dd data-score="culture.greeting">-</dd></div>
-              <div><dt>約束</dt><dd data-score="culture.promise">-</dd></div>
-              <div><dt>チームワーク</dt><dd data-score="culture.teamwork">-</dd></div>
-              <div><dt>思いやり</dt><dd data-score="culture.consideration">-</dd></div>
-              <div><dt>報連相</dt><dd data-score="culture.reporting">-</dd></div>
-              <div><dt>マネジメントチェック</dt><dd data-score="culture.managementCheck">-</dd></div>
-            </dl>
-          </article>
+            <article class="score-card" data-domain="training">
+              <div class="card-heading"><h3>育成</h3><span>Training</span></div>
+              <dl class="score-list">
+                <div><dt>教育進捗率</dt><dd data-score="training.educationProgress">-</dd></div>
+                <div><dt>新規リピート率</dt><dd data-score="training.newRepeatRate">-</dd></div>
+                <div><dt>リーダー輩出</dt><dd data-score="training.leaderDevelopment">-</dd></div>
+              </dl>
+            </article>
+
+            <article class="score-card" data-domain="retention">
+              <div class="card-heading"><h3>定着</h3><span>Retention</span></div>
+              <dl class="score-list">
+                <div><dt>離職率</dt><dd data-score="retention.turnoverRate">-</dd></div>
+                <div><dt>面談実施率</dt><dd data-score="retention.interviewRate">-</dd></div>
+                <div><dt>eNPS</dt><dd data-score="retention.enps">-</dd></div>
+              </dl>
+            </article>
+
+            <article class="score-card" data-domain="culture">
+              <div class="card-heading"><h3>理念</h3><span>Culture</span></div>
+              <dl class="score-list">
+                <div><dt>挨拶</dt><dd data-score="culture.greeting">-</dd></div>
+                <div><dt>約束</dt><dd data-score="culture.promise">-</dd></div>
+                <div><dt>チームワーク</dt><dd data-score="culture.teamwork">-</dd></div>
+                <div><dt>思いやり</dt><dd data-score="culture.consideration">-</dd></div>
+                <div><dt>報連相</dt><dd data-score="culture.reporting">-</dd></div>
+                <div><dt>マネジメントチェック</dt><dd data-score="culture.managementCheck">-</dd></div>
+              </dl>
+            </article>
+          </div>
         </section>
       </main>
     </div>
