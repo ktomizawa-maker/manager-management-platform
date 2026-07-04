@@ -12,9 +12,9 @@
     <div class="app-shell">
       <header class="topbar" aria-label="Management Platform header">
         <div class="brand-lockup">
-          <span class="brand-mark" aria-hidden="true">MP</span>
+          <span class="brand-mark" aria-hidden="true">B</span>
           <div>
-            <p class="eyebrow">Management Platform</p>
+            <p class="eyebrow">BASSA Management</p>
             <h1>店長OS</h1>
           </div>
         </div>
@@ -27,9 +27,9 @@
       <main>
         <section class="hero" aria-labelledby="hero-title">
           <div class="hero-copy">
-            <p class="eyebrow">Daily Command Hub</p>
-            <h2 id="hero-title">今日の現在地から、次の一手へ。</h2>
-            <p>成果、育成、定着、理念浸透を同じ視界に並べ、課題確認と改善アクションへの入口をまとめます。</p>
+            <p class="eyebrow">Daily Hub</p>
+            <h2 id="hero-title">今日やることを、すぐ確認。</h2>
+            <p>4領域の状態と次アクションをまとめて確認できます。</p>
           </div>
           <div class="today-board" aria-label="本日の確認">
             <div><span class="metric-label">優先確認</span><strong id="priorityCount">4</strong></div>
@@ -53,12 +53,12 @@
 
         <section class="section-heading" id="domains" aria-labelledby="domains-title">
           <p class="eyebrow">Evaluation Areas</p>
-          <h2 id="domains-title">4領域ハブ</h2>
+          <h2 id="domains-title">4領域</h2>
         </section>
 
         <section class="domain-grid" aria-label="店長評価4領域">
           <article class="domain-card" data-domain="sales" data-status="watch">
-            <div class="card-topline"><span class="domain-icon sales" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">要確認</span></div>
+            <div class="card-topline"><span class="domain-icon" aria-hidden="true">📈</span><span class="status-chip" data-field="statusLabel">⚠️ 要確認</span></div>
             <h3>成果</h3>
             <p data-field="domainSummary">売上、粗利、客数、客単価など、店舗成果の現在地と打ち手を確認します。</p>
             <dl class="card-metrics">
@@ -69,7 +69,7 @@
           </article>
 
           <article class="domain-card" data-domain="training" data-status="steady">
-            <div class="card-topline"><span class="domain-icon growth" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">進行中</span></div>
+            <div class="card-topline"><span class="domain-icon" aria-hidden="true">🌱</span><span class="status-chip" data-field="statusLabel">✓ 進行中</span></div>
             <h3>育成</h3>
             <p data-field="domainSummary">スタッフの成長テーマ、面談、習熟状況を見える化し、育成の滞留を減らします。</p>
             <dl class="card-metrics">
@@ -80,7 +80,7 @@
           </article>
 
           <article class="domain-card" data-domain="retention" data-status="risk">
-            <div class="card-topline"><span class="domain-icon retention" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">注意</span></div>
+            <div class="card-topline"><span class="domain-icon" aria-hidden="true">🤝</span><span class="status-chip" data-field="statusLabel">⚠️ 注意</span></div>
             <h3>定着</h3>
             <p data-field="domainSummary">勤怠、負荷、コンディション、離職兆候を早めに拾い、チームの安定度を保ちます。</p>
             <dl class="card-metrics">
@@ -91,7 +91,7 @@
           </article>
 
           <article class="domain-card" data-domain="culture" data-status="steady">
-            <div class="card-topline"><span class="domain-icon culture" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">習慣化</span></div>
+            <div class="card-topline"><span class="domain-icon" aria-hidden="true">💬</span><span class="status-chip" data-field="statusLabel">✓ 習慣化</span></div>
             <h3>理念浸透 / コンピテンシー / チームワーク</h3>
             <p data-field="domainSummary">行動基準、連携、店舗らしさの浸透を確認し、日々の判断とチーム運営につなげます。</p>
             <dl class="card-metrics">
@@ -137,7 +137,7 @@
 
         <section class="integration-note" id="integration-note" aria-labelledby="integration-title">
           <p class="eyebrow">Implementation Note</p>
-          <h2 id="integration-title">初期実装の接続方針</h2>
+          <h2 id="integration-title">接続状態</h2>
           <p>このTOP画面はread-onlyのハブです。既存DBの変更、新規DDL、更新系処理、権限変更、service_role keyの利用は行っていません。</p>
         </section>
       </main>
@@ -146,5 +146,7 @@
     <script src="./app.js"></script>
   </body>
 </html>
+
+
 
 
