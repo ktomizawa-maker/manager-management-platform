@@ -41,8 +41,15 @@
         <nav class="quick-actions" aria-label="クイックアクション">
           <a href="#domains">4領域を見る</a>
           <a href="#weekly-focus">今週の重点</a>
+          <a href="#today-actions">今日の運用</a>
           <a href="#integration-note">接続メモ</a>
         </nav>
+
+        <section class="ops-strip" aria-label="運用状況">
+          <div><span class="metric-label">同期元</span><strong id="summarySource">未接続</strong></div>
+          <div><span class="metric-label">最終同期</span><strong id="lastSyncedAt">-</strong></div>
+          <div><span class="metric-label">確認状態</span><strong id="reviewState">未確認</strong></div>
+        </section>
 
         <section class="section-heading" id="domains" aria-labelledby="domains-title">
           <p class="eyebrow">Evaluation Areas</p>
@@ -53,46 +60,70 @@
           <article class="domain-card" data-domain="sales" data-status="watch">
             <div class="card-topline"><span class="domain-icon sales" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">要確認</span></div>
             <h3>成果</h3>
-            <p>売上、粗利、客数、客単価など、店舗成果の現在地と打ち手を確認します。</p>
+            <p data-field="domainSummary">売上、粗利、客数、客単価など、店舗成果の現在地と打ち手を確認します。</p>
             <dl class="card-metrics">
               <div><dt>見るもの</dt><dd>予算比 / 前年比 / 重点KPI</dd></div>
               <div><dt>次アクション</dt><dd><span data-field="nextAction">日次の差分要因を確認</span></dd></div>
             </dl>
-            <a class="card-link" href="./sales/" aria-label="成果アプリへ移動">成果アプリへ</a>
+            <a class="card-link" href="https://script.google.com/macros/s/AKfycbyZo63D_wNZaDIaAtHycoyLkWolAkKbf4u1-_vK8gCiveAQz0XOMLBEYVB-SSQOfNx4/exec" target="_blank" rel="noopener noreferrer" aria-label="成果アプリを新しいタブで開く">成果アプリへ</a>
           </article>
 
           <article class="domain-card" data-domain="training" data-status="steady">
             <div class="card-topline"><span class="domain-icon growth" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">進行中</span></div>
             <h3>育成</h3>
-            <p>スタッフの成長テーマ、面談、習熟状況を見える化し、育成の滞留を減らします。</p>
+            <p data-field="domainSummary">スタッフの成長テーマ、面談、習熟状況を見える化し、育成の滞留を減らします。</p>
             <dl class="card-metrics">
               <div><dt>見るもの</dt><dd>面談予定 / 習熟 / 任せ方</dd></div>
               <div><dt>次アクション</dt><dd><span data-field="nextAction">今週育てる1項目を選ぶ</span></dd></div>
             </dl>
-            <a class="card-link" href="./training/" aria-label="育成アプリへ移動">育成アプリへ</a>
+            <a class="card-link" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbxKLThF4TN18-OwaOFKbqwoPPSAHB7HH4v3_IkTXEmAGrhDJyzS1GfkfC1GFGiA7vUZew/exec?page=home" target="_blank" rel="noopener noreferrer" aria-label="育成アプリを新しいタブで開く">育成アプリへ</a>
           </article>
 
           <article class="domain-card" data-domain="retention" data-status="risk">
             <div class="card-topline"><span class="domain-icon retention" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">注意</span></div>
             <h3>定着</h3>
-            <p>勤怠、負荷、コンディション、離職兆候を早めに拾い、チームの安定度を保ちます。</p>
+            <p data-field="domainSummary">勤怠、負荷、コンディション、離職兆候を早めに拾い、チームの安定度を保ちます。</p>
             <dl class="card-metrics">
               <div><dt>見るもの</dt><dd>シフト負荷 / 欠勤 / 声かけ</dd></div>
               <div><dt>次アクション</dt><dd><span data-field="nextAction">気になる人に声をかける</span></dd></div>
             </dl>
-            <a class="card-link" href="./retention/" aria-label="定着アプリへ移動">定着アプリへ</a>
+            <a class="card-link" href="https://script.google.com/a/macros/idea-nov.com/s/AKfycbwW8YZDEC_KAcWTD1Xym1un5qFlgoDW9KzBvENLfnbrCECn0WUTMC3d2RikfP9NiAER/exec" target="_blank" rel="noopener noreferrer" aria-label="定着アプリを新しいタブで開く">定着アプリへ</a>
           </article>
 
           <article class="domain-card" data-domain="culture" data-status="steady">
             <div class="card-topline"><span class="domain-icon culture" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">習慣化</span></div>
             <h3>理念浸透 / コンピテンシー / チームワーク</h3>
-            <p>行動基準、連携、店舗らしさの浸透を確認し、日々の判断とチーム運営につなげます。</p>
+            <p data-field="domainSummary">行動基準、連携、店舗らしさの浸透を確認し、日々の判断とチーム運営につなげます。</p>
             <dl class="card-metrics">
               <div><dt>見るもの</dt><dd>行動例 / 連携 / 称賛</dd></div>
               <div><dt>次アクション</dt><dd><span data-field="nextAction">よい行動を言語化する</span></dd></div>
             </dl>
             <a class="card-link" href="./culture/" aria-label="理念浸透アプリへ移動">理念アプリへ</a>
           </article>
+        </section>
+
+        <section class="today-actions" id="today-actions" aria-labelledby="today-actions-title">
+          <div class="section-heading compact">
+            <p class="eyebrow">Daily Operation</p>
+            <h2 id="today-actions-title">今日の運用</h2>
+          </div>
+          <div class="action-board">
+            <article>
+              <span class="step-number">1</span>
+              <h3>差分を見る</h3>
+              <p>4領域カードのステータスを確認し、注意または要確認の領域を先に開きます。</p>
+            </article>
+            <article>
+              <span class="step-number">2</span>
+              <h3>1つ決める</h3>
+              <p>次アクションから今日やることを1つ選び、朝礼または終礼で扱います。</p>
+            </article>
+            <article>
+              <span class="step-number">3</span>
+              <h3>戻って確認</h3>
+              <p>営業後にもう一度TOPへ戻り、明日に残す課題を整理します。</p>
+            </article>
+          </div>
         </section>
 
         <section class="focus-band" id="weekly-focus" aria-labelledby="focus-title">
@@ -107,7 +138,7 @@
         <section class="integration-note" id="integration-note" aria-labelledby="integration-title">
           <p class="eyebrow">Implementation Note</p>
           <h2 id="integration-title">初期実装の接続方針</h2>
-          <p>このTOP画面は静的ファイルのみで動作します。既存DBの変更、新規DDL、更新系処理、権限変更、service_role keyの利用は行っていません。</p>
+          <p>このTOP画面はread-onlyのハブです。既存DBの変更、新規DDL、更新系処理、権限変更、service_role keyの利用は行っていません。</p>
         </section>
       </main>
     </div>
