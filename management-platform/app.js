@@ -92,6 +92,17 @@
     return summary.domains;
   }
 
+  function decorateStatusLabel(status, label) {
+    var text = label || "確認";
+    if (text.indexOf("⚠️") === 0 || text.indexOf("✓") === 0) {
+      return text;
+    }
+    if (status === "risk" || status === "watch") {
+      return "⚠️ " + text;
+    }
+    return "✓ " + text;
+  }
+
   function pickSummaryText(data) {
     return data.summary || data.description || data.message || data.currentState || data.current_state;
   }
@@ -111,7 +122,7 @@
 
       card.setAttribute("data-status", status);
       if (statusElement) {
-        statusElement.textContent = statusLabel;
+        statusElement.textContent = decorateStatusLabel(status, statusLabel);
       }
       if (actionElement && nextAction) {
         actionElement.textContent = nextAction;
@@ -210,3 +221,4 @@
    */
   document.addEventListener("DOMContentLoaded", boot);
 })();
+
