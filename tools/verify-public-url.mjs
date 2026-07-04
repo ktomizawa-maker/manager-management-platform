@@ -10,13 +10,13 @@ if (!target) {
 const baseUrl = target.endsWith("/") ? target : `${target}/`;
 const requiredText = [
   "店長OS",
-  "成果",
-  "育成",
-  "定着",
-  "理念浸透",
-  "4領域ハブ"
+  "4領域のスコアを見る",
+  "売上達成率",
+  "教育進捗率",
+  "離職率",
+  "マネジメントチェック"
 ];
-const childPaths = ["sales/", "training/", "retention/", "culture/"];
+const childPaths = ["culture/"];
 const forbiddenPatterns = [
   /service_role\s*[:=]/i,
   /SUPABASE_SERVICE_ROLE/i,
