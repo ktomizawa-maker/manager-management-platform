@@ -1,0 +1,119 @@
+﻿<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>店長Management Platform</title>
+    <meta name="description" content="店長が成果、育成、定着、理念浸透の現在地と次アクションを確認するManagement Platform TOP画面" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#domains">メインへ移動</a>
+    <div class="app-shell">
+      <header class="topbar" aria-label="Management Platform header">
+        <div class="brand-lockup">
+          <span class="brand-mark" aria-hidden="true">MP</span>
+          <div>
+            <p class="eyebrow">Management Platform</p>
+            <h1>店長OS</h1>
+          </div>
+        </div>
+        <div class="context-panel" aria-label="店舗コンテキスト">
+          <span id="storeName">店舗未選択</span>
+          <span id="managerName">店長</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow">Daily Command Hub</p>
+            <h2 id="hero-title">今日の現在地から、次の一手へ。</h2>
+            <p>成果、育成、定着、理念浸透を同じ視界に並べ、課題確認と改善アクションへの入口をまとめます。</p>
+          </div>
+          <div class="today-board" aria-label="本日の確認">
+            <div><span class="metric-label">優先確認</span><strong id="priorityCount">4</strong></div>
+            <div><span class="metric-label">更新日</span><strong id="updatedDate">-</strong></div>
+            <div><span class="metric-label">接続</span><strong id="connectionState">静的</strong></div>
+          </div>
+        </section>
+
+        <nav class="quick-actions" aria-label="クイックアクション">
+          <a href="#domains">4領域を見る</a>
+          <a href="#weekly-focus">今週の重点</a>
+          <a href="#integration-note">接続メモ</a>
+        </nav>
+
+        <section class="section-heading" id="domains" aria-labelledby="domains-title">
+          <p class="eyebrow">Evaluation Areas</p>
+          <h2 id="domains-title">4領域ハブ</h2>
+        </section>
+
+        <section class="domain-grid" aria-label="店長評価4領域">
+          <article class="domain-card" data-domain="sales" data-status="watch">
+            <div class="card-topline"><span class="domain-icon sales" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">要確認</span></div>
+            <h3>成果</h3>
+            <p>売上、粗利、客数、客単価など、店舗成果の現在地と打ち手を確認します。</p>
+            <dl class="card-metrics">
+              <div><dt>見るもの</dt><dd>予算比 / 前年比 / 重点KPI</dd></div>
+              <div><dt>次アクション</dt><dd><span data-field="nextAction">日次の差分要因を確認</span></dd></div>
+            </dl>
+            <a class="card-link" href="./sales/" aria-label="成果アプリへ移動">成果アプリへ</a>
+          </article>
+
+          <article class="domain-card" data-domain="training" data-status="steady">
+            <div class="card-topline"><span class="domain-icon growth" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">進行中</span></div>
+            <h3>育成</h3>
+            <p>スタッフの成長テーマ、面談、習熟状況を見える化し、育成の滞留を減らします。</p>
+            <dl class="card-metrics">
+              <div><dt>見るもの</dt><dd>面談予定 / 習熟 / 任せ方</dd></div>
+              <div><dt>次アクション</dt><dd><span data-field="nextAction">今週育てる1項目を選ぶ</span></dd></div>
+            </dl>
+            <a class="card-link" href="./training/" aria-label="育成アプリへ移動">育成アプリへ</a>
+          </article>
+
+          <article class="domain-card" data-domain="retention" data-status="risk">
+            <div class="card-topline"><span class="domain-icon retention" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">注意</span></div>
+            <h3>定着</h3>
+            <p>勤怠、負荷、コンディション、離職兆候を早めに拾い、チームの安定度を保ちます。</p>
+            <dl class="card-metrics">
+              <div><dt>見るもの</dt><dd>シフト負荷 / 欠勤 / 声かけ</dd></div>
+              <div><dt>次アクション</dt><dd><span data-field="nextAction">気になる人に声をかける</span></dd></div>
+            </dl>
+            <a class="card-link" href="./retention/" aria-label="定着アプリへ移動">定着アプリへ</a>
+          </article>
+
+          <article class="domain-card" data-domain="culture" data-status="steady">
+            <div class="card-topline"><span class="domain-icon culture" aria-hidden="true"></span><span class="status-chip" data-field="statusLabel">習慣化</span></div>
+            <h3>理念浸透 / コンピテンシー / チームワーク</h3>
+            <p>行動基準、連携、店舗らしさの浸透を確認し、日々の判断とチーム運営につなげます。</p>
+            <dl class="card-metrics">
+              <div><dt>見るもの</dt><dd>行動例 / 連携 / 称賛</dd></div>
+              <div><dt>次アクション</dt><dd><span data-field="nextAction">よい行動を言語化する</span></dd></div>
+            </dl>
+            <a class="card-link" href="./culture/" aria-label="理念浸透アプリへ移動">理念アプリへ</a>
+          </article>
+        </section>
+
+        <section class="focus-band" id="weekly-focus" aria-labelledby="focus-title">
+          <div><p class="eyebrow">Weekly Focus</p><h2 id="focus-title">今週の重点</h2></div>
+          <ol class="focus-list">
+            <li>成果の差分を確認し、1つだけ原因仮説を置く</li>
+            <li>育成対象者を1名決め、任せる業務を明確にする</li>
+            <li>定着リスクが高いサインを朝礼前に確認する</li>
+          </ol>
+        </section>
+
+        <section class="integration-note" id="integration-note" aria-labelledby="integration-title">
+          <p class="eyebrow">Implementation Note</p>
+          <h2 id="integration-title">初期実装の接続方針</h2>
+          <p>このTOP画面は静的ファイルのみで動作します。既存DBの変更、新規DDL、更新系処理、権限変更、service_role keyの利用は行っていません。</p>
+        </section>
+      </main>
+    </div>
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
+
+
