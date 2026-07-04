@@ -2,15 +2,27 @@
   "use strict";
 
   var fallbackContext = {
-    storeName: "店舗未選択",
-    managerName: "店長"
+    storeName: "店舗未選択"
   };
 
-  var fallbackDomainLabels = {
-    sales: "要確認",
-    training: "進行中",
-    retention: "注意",
-    culture: "習慣化"
+  var scoreAliases = {
+    "sales.salesAchievement": ["sales.salesAchievement", "sales.sales_achievement", "sales.売上達成率", "成果.売上達成率", "売上達成率"],
+    "sales.contributionProductivity": ["sales.contributionProductivity", "sales.contribution_productivity", "sales.貢献生産性", "成果.貢献生産性", "貢献生産性"],
+    "sales.approachRate": ["sales.approachRate", "sales.approach_rate", "sales.アプローチ率", "成果.アプローチ率", "アプローチ率"],
+    "sales.nps": ["sales.nps", "sales.NPS", "sales.Nps", "成果.NPS", "NPS"],
+    "sales.customerSatisfaction": ["sales.customerSatisfaction", "sales.customer_satisfaction", "sales.顧客満足度", "成果.顧客満足度", "顧客満足度"],
+    "training.educationProgress": ["training.educationProgress", "training.education_progress", "training.教育進捗率", "育成.教育進捗率", "教育進捗率"],
+    "training.newRepeatRate": ["training.newRepeatRate", "training.new_repeat_rate", "training.新規リピート率", "育成.新規リピート率", "新規リピート率"],
+    "training.leaderDevelopment": ["training.leaderDevelopment", "training.leader_development", "training.リーダー輩出", "育成.リーダー輩出", "リーダー輩出"],
+    "retention.turnoverRate": ["retention.turnoverRate", "retention.turnover_rate", "retention.離職率", "定着.離職率", "離職率"],
+    "retention.interviewRate": ["retention.interviewRate", "retention.interview_rate", "retention.面談実施率", "定着.面談実施率", "面談実施率"],
+    "retention.enps": ["retention.enps", "retention.eNPS", "retention.ENPS", "定着.eNPS", "eNPS"],
+    "culture.greeting": ["culture.greeting", "culture.挨拶", "理念.挨拶", "挨拶"],
+    "culture.promise": ["culture.promise", "culture.約束", "理念.約束", "約束"],
+    "culture.teamwork": ["culture.teamwork", "culture.チームワーク", "理念.チームワーク", "チームワーク"],
+    "culture.consideration": ["culture.consideration", "culture.思いやり", "理念.思いやり", "思いやり"],
+    "culture.reporting": ["culture.reporting", "culture.報連相", "理念.報連相", "報連相"],
+    "culture.managementCheck": ["culture.managementCheck", "culture.management_check", "culture.マネジメントチェック", "理念.マネジメントチェック", "マネジメントチェック"]
   };
 
   function readHubContext() {
@@ -49,99 +61,85 @@
 
   function applyContext(context) {
     var storeName = context.store_name || context.storeName || fallbackContext.storeName;
-    var managerName = context.manager_name || context.managerName || context.displayName || fallbackContext.managerName;
-
     setText("storeName", storeName);
-    setText("managerName", managerName);
   }
 
-  function formatDate(value, options) {
-    var date = value ? new Date(value) : new Date();
-    if (Number.isNaN(date.getTime())) {
-      date = new Date();
-    }
-    return new Intl.DateTimeFormat("ja-JP", options).format(date);
-  }
-
-  function applyUpdatedDate(value) {
-    setText("updatedDate", formatDate(value, { month: "numeric", day: "numeric", weekday: "short" }));
-  }
-
-  function applyLastSynced(value) {
+  function formatDate(value) {
     if (!value) {
-      setText("lastSyncedAt", "未同期");
+      return "-";
+    }
+    var date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return "-";
+    }
+    return new Intl.DateTimeFormat("ja-JP", {
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(date);
+  }
+
+  function getByPath(source, path) {
+    return path.split(".").reduce(function (current, key) {
+      if (current && Object.prototype.hasOwnProperty.call(current, key)) {
+        return current[key];
+      }
+      return undefined;
+    }, source);
+  }
+
+  function readScore(summary, scoreKey) {
+    var aliases = scoreAliases[scoreKey] || [scoreKey];
+    var sources = [summary && summary.scores, summary && summary.score, summary && summary.domains, summary];
+
+    for (var i = 0; i < sources.length; i += 1) {
+      var source = sources[i];
+      if (!source) {
+        continue;
+      }
+      for (var j = 0; j < aliases.length; j += 1) {
+        var value = getByPath(source, aliases[j]);
+        if (value !== undefined && value !== null && value !== "") {
+          return value;
+        }
+      }
+    }
+    return null;
+  }
+
+  function formatScore(value) {
+    if (value === null || value === undefined || value === "") {
+      return "-";
+    }
+    if (typeof value === "number") {
+      return Number.isInteger(value) ? String(value) : String(Math.round(value * 10) / 10);
+    }
+    if (typeof value === "object" && value.value !== undefined) {
+      return formatScore(value.value);
+    }
+    return String(value);
+  }
+
+  function applyScoreState(element, value) {
+    element.removeAttribute("data-trend");
+    if (value === null || value === undefined || value === "") {
+      element.setAttribute("data-state", "empty");
       return;
     }
-    setText("lastSyncedAt", formatDate(value, { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }));
-  }
-
-  function applyConnectionState(label) {
-    setText("connectionState", label);
-    setText("reviewState", label === "Supabase" ? "確認可能" : "要接続確認");
-  }
-
-  function countPriorityCards() {
-    var cards = Array.prototype.slice.call(document.querySelectorAll('.domain-card[data-status="risk"], .domain-card[data-status="watch"]'));
-    setText("priorityCount", String(cards.length || document.querySelectorAll(".domain-card").length));
-  }
-
-  function normalizeDomains(summary) {
-    if (!summary || !summary.domains) {
-      return {};
+    element.removeAttribute("data-state");
+    if (typeof value === "object" && value.trend) {
+      element.setAttribute("data-trend", value.trend);
     }
-    return summary.domains;
   }
 
-  function decorateStatusLabel(status, label) {
-    var text = label || "確認";
-    if (text.indexOf("⚠️") === 0 || text.indexOf("✓") === 0) {
-      return text;
-    }
-    if (status === "risk" || status === "watch") {
-      return "⚠️ " + text;
-    }
-    return "✓ " + text;
-  }
-
-  function pickSummaryText(data) {
-    return data.summary || data.description || data.message || data.currentState || data.current_state;
-  }
-
-  function applyDomainSummary(summary) {
-    var domains = normalizeDomains(summary);
-    document.querySelectorAll(".domain-card[data-domain]").forEach(function (card) {
-      var key = card.getAttribute("data-domain");
-      var data = domains[key] || {};
-      var status = data.status || card.getAttribute("data-status") || "steady";
-      var statusLabel = data.statusLabel || data.status_label || data.label || fallbackDomainLabels[key] || "確認";
-      var nextAction = data.nextAction || data.next_action || data.action;
-      var summaryText = pickSummaryText(data);
-      var statusElement = card.querySelector('[data-field="statusLabel"]');
-      var actionElement = card.querySelector('[data-field="nextAction"]');
-      var summaryElement = card.querySelector('[data-field="domainSummary"]');
-
-      card.setAttribute("data-status", status);
-      if (statusElement) {
-        statusElement.textContent = decorateStatusLabel(status, statusLabel);
-      }
-      if (actionElement && nextAction) {
-        actionElement.textContent = nextAction;
-      }
-      if (summaryElement && summaryText) {
-        summaryElement.textContent = summaryText;
-      }
+  function applyScores(summary) {
+    document.querySelectorAll("[data-score]").forEach(function (element) {
+      var key = element.getAttribute("data-score");
+      var value = readScore(summary, key);
+      element.textContent = formatScore(value);
+      applyScoreState(element, value);
     });
-    countPriorityCards();
-  }
-
-  function applySummaryMeta(summary) {
-    var source = summary.source || (summary.app && summary.app.source) || "supabase-edge";
-    var generatedAt = summary.generatedAt || summary.generated_at || summary.updatedAt || summary.updated_at;
-    var connection = (summary.app && summary.app.connection) || summary.connection || "Supabase";
-
-    setText("summarySource", source);
-    applyLastSynced(generatedAt);
-    applyConnectionState(connection === "Supabase" ? "Supabase" : "Supabase");
   }
 
   function buildSummaryUrl(config, context) {
@@ -187,38 +185,27 @@
     var config = readConfig();
 
     applyContext(context);
-    applyUpdatedDate();
-    applyLastSynced();
-    countPriorityCards();
+    applyScores({});
 
     if (!isConfigured(config)) {
-      applyConnectionState("静的");
-      setText("summarySource", "静的表示");
+      setText("connectionState", "静的");
+      setText("lastSyncedAt", "-");
       return;
     }
 
-    applyConnectionState("接続中");
-    setText("summarySource", "取得中");
+    setText("connectionState", "接続中");
     fetchSummary(config, context)
       .then(function (summary) {
         applyContext(Object.assign({}, context, summary));
-        applyUpdatedDate(summary.updatedAt || summary.updated_at || summary.generatedAt || summary.generated_at);
-        applyDomainSummary(summary);
-        applySummaryMeta(summary);
+        applyScores(summary);
+        setText("connectionState", "Supabase");
+        setText("lastSyncedAt", formatDate(summary.generatedAt || summary.generated_at || summary.updatedAt || summary.updated_at));
       })
       .catch(function () {
-        applyConnectionState("静的");
-        setText("summarySource", "取得失敗");
-        applyLastSynced();
+        setText("connectionState", "静的");
+        setText("lastSyncedAt", "取得失敗");
       });
   }
 
-  /*
-   * Read-only integration:
-   * - GitHub Pages serves this static app.
-   * - Supabase is accessed through an Edge Function with anon credentials only.
-   * - No service_role key, DDL, RLS, GRANT, UPDATE, or DELETE behavior belongs here.
-   */
   document.addEventListener("DOMContentLoaded", boot);
 })();
-
