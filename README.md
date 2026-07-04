@@ -1,0 +1,1 @@
+# manager-management-platform
