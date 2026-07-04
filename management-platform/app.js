@@ -55,24 +55,34 @@
     setText("managerName", managerName);
   }
 
-  function applyUpdatedDate(value) {
+  function formatDate(value, options) {
     var date = value ? new Date(value) : new Date();
-    var formatter = new Intl.DateTimeFormat("ja-JP", {
-      month: "numeric",
-      day: "numeric",
-      weekday: "short"
-    });
+    if (Number.isNaN(date.getTime())) {
+      date = new Date();
+    }
+    return new Intl.DateTimeFormat("ja-JP", options).format(date);
+  }
 
-    setText("updatedDate", formatter.format(date));
+  function applyUpdatedDate(value) {
+    setText("updatedDate", formatDate(value, { month: "numeric", day: "numeric", weekday: "short" }));
+  }
+
+  function applyLastSynced(value) {
+    if (!value) {
+      setText("lastSyncedAt", "未同期");
+      return;
+    }
+    setText("lastSyncedAt", formatDate(value, { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }));
   }
 
   function applyConnectionState(label) {
     setText("connectionState", label);
+    setText("reviewState", label === "Supabase" ? "確認可能" : "要接続確認");
   }
 
   function countPriorityCards() {
-    var cards = document.querySelectorAll(".domain-card");
-    setText("priorityCount", String(cards.length));
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.domain-card[data-status="risk"], .domain-card[data-status="watch"]'));
+    setText("priorityCount", String(cards.length || document.querySelectorAll(".domain-card").length));
   }
 
   function normalizeDomains(summary) {
@@ -82,16 +92,22 @@
     return summary.domains;
   }
 
+  function pickSummaryText(data) {
+    return data.summary || data.description || data.message || data.currentState || data.current_state;
+  }
+
   function applyDomainSummary(summary) {
     var domains = normalizeDomains(summary);
     document.querySelectorAll(".domain-card[data-domain]").forEach(function (card) {
       var key = card.getAttribute("data-domain");
       var data = domains[key] || {};
       var status = data.status || card.getAttribute("data-status") || "steady";
-      var statusLabel = data.statusLabel || data.label || fallbackDomainLabels[key] || "確認";
-      var nextAction = data.nextAction || data.next_action;
+      var statusLabel = data.statusLabel || data.status_label || data.label || fallbackDomainLabels[key] || "確認";
+      var nextAction = data.nextAction || data.next_action || data.action;
+      var summaryText = pickSummaryText(data);
       var statusElement = card.querySelector('[data-field="statusLabel"]');
       var actionElement = card.querySelector('[data-field="nextAction"]');
+      var summaryElement = card.querySelector('[data-field="domainSummary"]');
 
       card.setAttribute("data-status", status);
       if (statusElement) {
@@ -100,7 +116,21 @@
       if (actionElement && nextAction) {
         actionElement.textContent = nextAction;
       }
+      if (summaryElement && summaryText) {
+        summaryElement.textContent = summaryText;
+      }
     });
+    countPriorityCards();
+  }
+
+  function applySummaryMeta(summary) {
+    var source = summary.source || (summary.app && summary.app.source) || "supabase-edge";
+    var generatedAt = summary.generatedAt || summary.generated_at || summary.updatedAt || summary.updated_at;
+    var connection = (summary.app && summary.app.connection) || summary.connection || "Supabase";
+
+    setText("summarySource", source);
+    applyLastSynced(generatedAt);
+    applyConnectionState(connection === "Supabase" ? "Supabase" : "Supabase");
   }
 
   function buildSummaryUrl(config, context) {
@@ -147,23 +177,28 @@
 
     applyContext(context);
     applyUpdatedDate();
+    applyLastSynced();
     countPriorityCards();
 
     if (!isConfigured(config)) {
       applyConnectionState("静的");
+      setText("summarySource", "静的表示");
       return;
     }
 
     applyConnectionState("接続中");
+    setText("summarySource", "取得中");
     fetchSummary(config, context)
       .then(function (summary) {
         applyContext(Object.assign({}, context, summary));
-        applyUpdatedDate(summary.updatedAt || summary.updated_at);
+        applyUpdatedDate(summary.updatedAt || summary.updated_at || summary.generatedAt || summary.generated_at);
         applyDomainSummary(summary);
-        applyConnectionState("Supabase");
+        applySummaryMeta(summary);
       })
       .catch(function () {
         applyConnectionState("静的");
+        setText("summarySource", "取得失敗");
+        applyLastSynced();
       });
   }
 
