@@ -1,9 +1,8 @@
 ﻿(function () {
   "use strict";
 
-  var fallbackContext = {
-    storeName: "店舗未選択"
-  };
+  var fallbackContext = { storeName: "店舗未選択" };
+  var selectedStoreKey = "managerPlatformSelectedStoreId";
 
   var scoreAliases = {
     "sales.salesAchievement": ["sales.salesAchievement", "sales.sales_achievement", "sales.売上達成率", "成果.売上達成率", "売上達成率"],
@@ -29,7 +28,6 @@
     if (window.hub_context && typeof window.hub_context === "object") {
       return window.hub_context;
     }
-
     try {
       var storedContext = window.localStorage.getItem("hub_context");
       return storedContext ? JSON.parse(storedContext) : {};
@@ -57,11 +55,6 @@
     if (element) {
       element.textContent = value;
     }
-  }
-
-  function applyContext(context) {
-    var storeName = context.store_name || context.storeName || fallbackContext.storeName;
-    setText("storeName", storeName);
   }
 
   function formatDate(value) {
@@ -142,12 +135,86 @@
     });
   }
 
+  function normalizeStore(store) {
+    if (!store || typeof store !== "object") {
+      return null;
+    }
+    var id = store.id || store.store_id || store.storeId || store.code || store.store_code;
+    var name = store.name || store.store_name || store.storeName || store.label || id;
+    if (!id && !name) {
+      return null;
+    }
+    return { id: String(id || name), name: String(name || id) };
+  }
+
+  function readStores(summary) {
+    var candidates = [summary && summary.stores, summary && summary.storeOptions, summary && summary.store_options, summary && summary.app && summary.app.stores];
+    for (var i = 0; i < candidates.length; i += 1) {
+      if (Array.isArray(candidates[i])) {
+        return candidates[i].map(normalizeStore).filter(Boolean);
+      }
+    }
+    return [];
+  }
+
+  function getSelectedStoreId(context) {
+    try {
+      return window.localStorage.getItem(selectedStoreKey) || context.store_id || context.storeId || "";
+    } catch (error) {
+      return context.store_id || context.storeId || "";
+    }
+  }
+
+  function setSelectedStoreId(value) {
+    try {
+      if (value) {
+        window.localStorage.setItem(selectedStoreKey, value);
+      } else {
+        window.localStorage.removeItem(selectedStoreKey);
+      }
+    } catch (error) {}
+  }
+
+  function renderStores(stores, selectedStoreId) {
+    var select = document.getElementById("storeSelect");
+    if (!select) {
+      return;
+    }
+
+    select.innerHTML = "";
+    if (!stores.length) {
+      var option = document.createElement("option");
+      option.value = "";
+      option.textContent = "店舗情報の返却待ち";
+      select.appendChild(option);
+      select.disabled = true;
+      setText("storeHelp", "Supabaseには接続済みです。店舗一覧はEdge Functionのstores返却後に選択できます。");
+      return;
+    }
+
+    stores.forEach(function (store) {
+      var option = document.createElement("option");
+      option.value = store.id;
+      option.textContent = store.name;
+      select.appendChild(option);
+    });
+    select.disabled = false;
+    if (selectedStoreId && stores.some(function (store) { return store.id === selectedStoreId; })) {
+      select.value = selectedStoreId;
+    } else {
+      select.value = stores[0].id;
+      setSelectedStoreId(select.value);
+    }
+    setText("storeHelp", "Supabaseから取得した店舗でスコア表示を切り替えます。");
+  }
+
   function buildSummaryUrl(config, context) {
     var baseUrl = config.supabaseUrl.replace(/\/$/, "");
     var functionName = config.edgeFunctionName || "manager-platform-summary";
     var url = new URL(baseUrl + "/functions/v1/" + functionName);
-    var storeId = context.store_id || context.storeId;
+    var storeId = getSelectedStoreId(context);
 
+    url.searchParams.set("include", "stores,scores");
     if (storeId) {
       url.searchParams.set("store_id", storeId);
     }
@@ -180,23 +247,12 @@
       });
   }
 
-  function boot() {
-    var context = readHubContext();
-    var config = readConfig();
-
-    applyContext(context);
-    applyScores({});
-
-    if (!isConfigured(config)) {
-      setText("connectionState", "静的");
-      setText("lastSyncedAt", "-");
-      return;
-    }
-
+  function refresh(config, context) {
     setText("connectionState", "接続中");
-    fetchSummary(config, context)
+    return fetchSummary(config, context)
       .then(function (summary) {
-        applyContext(Object.assign({}, context, summary));
+        var stores = readStores(summary);
+        renderStores(stores, getSelectedStoreId(context));
         applyScores(summary);
         setText("connectionState", "Supabase");
         setText("lastSyncedAt", formatDate(summary.generatedAt || summary.generated_at || summary.updatedAt || summary.updated_at));
@@ -204,7 +260,37 @@
       .catch(function () {
         setText("connectionState", "静的");
         setText("lastSyncedAt", "取得失敗");
+        renderStores([], "");
       });
+  }
+
+  function bindStoreSelect(config, context) {
+    var select = document.getElementById("storeSelect");
+    if (!select) {
+      return;
+    }
+    select.addEventListener("change", function () {
+      setSelectedStoreId(select.value);
+      applyScores({});
+      refresh(config, context);
+    });
+  }
+
+  function boot() {
+    var context = readHubContext();
+    var config = readConfig();
+
+    applyScores({});
+    bindStoreSelect(config, context);
+
+    if (!isConfigured(config)) {
+      setText("connectionState", "静的");
+      setText("lastSyncedAt", "-");
+      renderStores([], "");
+      return;
+    }
+
+    refresh(config, context);
   }
 
   document.addEventListener("DOMContentLoaded", boot);
